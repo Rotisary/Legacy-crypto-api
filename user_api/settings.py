@@ -78,7 +78,25 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication'
-    ]
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+        'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'user_api.utils.BurstUserRateThrottle',
+        'user_api.utils.SustainedUserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '50/day',
+        'burst': '30/min',
+        'sustained': '100/day'
+    },
+    'DEFAULT_PARSER_CLASS': 'rest_framework.parsers.FileUploadParser',
+    'DEFAULT_RENDERER_CLASS': 'rest_framework.renderers.JSONRenderer',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+    'EXCEPTION_HANDLER': 'user_api.utils.custom_exception_handler'
 }
 
 WSGI_APPLICATION = 'user_api.wsgi.application'
