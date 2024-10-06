@@ -65,6 +65,7 @@ class WalletSerializer(serializers.HyperlinkedModelSerializer):
         model = Wallet
         fields = [ 'url', 'seed_phrase', 'owner']
         extra_kwargs = {
+            'url': {'lookup_url_kwarg': 'username'},
             'owner': {
                 'view_name': 'profile-detail',
                 'read_only': True,
