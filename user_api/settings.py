@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9_9*5qf+yvzguk2myb_y+n+7l9$9mutfs%bj)s&_$p!29wfb_s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['olumoroti.pythonanywhere.com']
 
 
 # Application definition
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -107,23 +109,49 @@ AUTH_USER_MODEL = 'users.User'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DB_NAME = 'user_api_db'
-DB_USER = 'django'
-PASSWORD = 'password'
+DB_NAME = 'Olumoroti$crypto_db'
+DB_USER = 'Olumoroti'
+PASSWORD = 'SQcr@db1'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': DB_NAME,
         'USER': DB_USER,
         'PASSWORD': PASSWORD,
-        'HOST': 'localhost',
-        'PORT': 5432
+        'HOST': 'Olumoroti.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
+	'OPTIONS': {
+            'charset': 'utf8mb4',
+        }
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+import logging
+
+logger = logging.getLogger('django.db.backends')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'sql_errors.log'),
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -156,9 +184,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+<<<<<<< HEAD
+=======
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Static files locally
+    },
+}
+>>>>>>> 5cb9ad6602d25670368ad7b4864c1113cda57b80
