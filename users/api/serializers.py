@@ -63,8 +63,9 @@ class ChangePasswordSerializer(serializers.Serializer):
 class WalletSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Wallet
-        fields = [ 'url', 'seed_phrase', 'owner']
+        fields = [ 'url', 'seed_phrase', 'owner', 'external_wallet']
         extra_kwargs = {
+	    'url': {'lookup_url_kwarg': 'username'},
             'owner': {
                 'view_name': 'profile-detail',
                 'read_only': True,

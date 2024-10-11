@@ -46,11 +46,13 @@ class UserManager(BaseUserManager):
     
 
 class User(AbstractBaseUser):
-    user_id = models.CharField(verbose_name='user id', 
+    user_id = models.CharField(verbose_name='user id',
+				  max_length=8, 
                                   unique=True, 
                                   null=False, 
                                   blank=False)
-    email = models.EmailField(verbose_name='email', 
+    email = models.EmailField(verbose_name='email',
+			      max_length=254, 
                               unique=True, 
                               null=False, 
                               blank=False)
@@ -58,7 +60,7 @@ class User(AbstractBaseUser):
                                 unique=True, 
                                 null=False, 
                                 blank=False)
-    name = models.CharField(null=False, blank=False)
+    name = models.CharField(max_length=225, null=False, blank=False)
     date_joined = models.DateTimeField(auto_now_add=True, null=False)
     last_login = models.DateTimeField(auto_now=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -102,8 +104,8 @@ class Wallet(models.Model):
                                   blank=True, 
                                   null=True,
                                   on_delete=models.CASCADE)
-    seed_phrase = models.CharField(null=False, blank=False, unique=True)
-    external_wallet = models.CharField(blank=False, null=False)
+    seed_phrase = models.CharField(max_length=255, null=False, blank=False, unique=True)
+    external_wallet = models.CharField(max_length=255, blank=False, null=False)
 
 
     def __str__(self):

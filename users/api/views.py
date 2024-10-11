@@ -300,14 +300,17 @@ def delete_wallet_view(request, username):
 @parser_classes([JSONParser, MultiPartParser])
 def send_fund(request, username):
     if request.method == 'POST':
-        receiver = Profile.objects.get(user__username=username)
-        serializer = FundSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(owner=receiver)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        if not request.user.is_admin:
+            raise PermissionDenied(detail='you are not allowed to perform this action')
         else:
-            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+            receiver = Profile.objects.get(user__username=username)
+            serializer = FundSerializer(data=request.data, context={'request': request})
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(owner=receiver)
+                return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', ])
 @permission_classes([IsAuthenticated, ])
