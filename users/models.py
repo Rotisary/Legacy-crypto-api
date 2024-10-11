@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from rest_framework.authtoken.models import Token
-# from django_cryptography.fields import encrypt
+from django.template.defaultfilters import slugify
 
 
 class UserManager(BaseUserManager):
@@ -89,11 +89,21 @@ class Profile(models.Model):
                                 related_name='profile', 
                                 on_delete=models.CASCADE)
     balance = models.IntegerField(default=0)
+    slug = models.SlugField(max_length=225,
+                            blank=False,
+                            null=False,
+                            unique=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='created_at')
 
 
     def __str__(self):
         return f"{self.user.username}'s profile"
+    
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f"{self.user.username} {self.id}")
+        return super(Profile, self).save(*args, **kwargs)
+
 
 
 class Wallet(models.Model):
@@ -104,10 +114,19 @@ class Wallet(models.Model):
                                   on_delete=models.CASCADE)
     seed_phrase = models.CharField(null=False, blank=False, unique=True)
     external_wallet = models.CharField(blank=False, null=False)
+    slug = models.SlugField(max_length=225,
+                            blank=False,
+                            null=False,
+                            unique=True)
 
 
     def __str__(self):
         return f"{self.owner.user.username}'s wallet"
+
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f"{self.owner.user.username} {self.id}")
+        return super(Wallet, self).save(*args, **kwargs)
 
 
 class Fund(models.Model):

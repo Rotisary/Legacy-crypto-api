@@ -62,10 +62,6 @@ class ObtainAuthTokenView(APIView):
 
         email = request.data.get('email')
         password = request.data.get('password')
-        # serializer = LoginSerializer(data=request.data)
-        # if serializer.is_valid(raise_exception=True):
-        #     # validated_data = serializer.validated_data
-        #     user = serializer.save()
         account = authenticate(email=email, password=password)
 
         if account is not None:
@@ -79,16 +75,12 @@ class ObtainAuthTokenView(APIView):
             data['pk'] = account.pk
             data['email'] = account.email
             data['token'] = token
-            # login(request, account)
-            # return Response(reverse('user-detail', request=request, kwargs={'username': account.username}))
             status_code = status.HTTP_200_OK
         else:
             data['response'] = 'error'
             data['error_message'] = 'Invalid credentials'
             status_code = status.HTTP_400_BAD_REQUEST  
         return Response(data=data, status=status_code)
-        # else:
-        #     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', ])
@@ -128,7 +120,7 @@ def update_user_detail_view(request, username):
                     data['success'] = 'update successful'
                     return Response(data=data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Profile.DoesNotExist:
+    except User.DoesNotExist:
         raise NotFound(detail='this user does not exist')
 
 
@@ -202,9 +194,9 @@ class ChangePasswordApiView(UpdateAPIView):
 @api_view(['GET', ])
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer, BrowsableAPIRenderer])
-def profile_view(request, username):
+def profile_view(request, slug):
     try:
-        profile = Profile.objects.get(user__username=username)
+        profile = Profile.objects.get(slug=slug)
     
         if request.user != profile.user:
             raise PermissionDenied
@@ -219,9 +211,9 @@ def profile_view(request, username):
 @api_view(['PUT', ])
 @permission_classes([IsAuthenticated])
 @parser_classes([JSONParser, MultiPartParser])
-def update_profile_view(request, username):
+def update_profile_view(request, slug):
     try:
-        profile = Profile.objects.get(user__username=username)
+        profile = Profile.objects.get(slug=slug)
 
     
         if request.user != profile.user:
@@ -257,9 +249,9 @@ def add_wallet(request):
 @api_view(['GET', ])
 @permission_classes([IsAuthenticated, ])
 @renderer_classes([JSONRenderer, BrowsableAPIRenderer])
-def wallet_view(request, username):
+def wallet_view(request, slug):
     try:
-        wallet = Wallet.objects.get(owner__user__username=username) 
+        wallet = Wallet.objects.get(slug=slug) 
 
         if request.user.profile != wallet.owner:
             raise PermissionDenied

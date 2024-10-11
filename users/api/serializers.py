@@ -7,10 +7,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
     class Meta:
         model = User
-        fields = ['url', 'user_id', 'email', 'username', 'name', 'password', 'password2']
+        fields = ['user_id', 'email', 'username', 'name', 'password', 'password2']
         extra_kwargs = {
             'password': {'write_only': True},
-            'url': {'lookup_field': 'username'},
             'user_id': {'read_only': True}
         }
 
@@ -32,7 +31,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email', 'username', 'name']    
+        fields = ['email', 'name']    
 
 
 
@@ -40,13 +39,12 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     wallet = serializers.HyperlinkedRelatedField(
         read_only=True,
         view_name='wallet-detail',
-        lookup_url_kwarg='username'
+        lookup_field='slug'
     )
     class Meta:
         model = Profile
-        fields = ['url', 'user', 'balance', 'wallet']
+        fields = ['user', 'balance', 'wallet']
         extra_kwargs = {
-            'url': {'lookup_url_kwarg': 'username'},
             'user': {
                 'lookup_field': 'username',
                 'read_only': True
@@ -63,13 +61,12 @@ class ChangePasswordSerializer(serializers.Serializer):
 class WalletSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Wallet
-        fields = [ 'url', 'seed_phrase', 'owner']
+        fields = ['seed_phrase', 'owner', 'external_wallet']
         extra_kwargs = {
-            'url': {'lookup_url_kwarg': 'username'},
             'owner': {
                 'view_name': 'profile-detail',
                 'read_only': True,
-                'lookup_url_kwarg': 'username'
+                'lookup_field': 'slug'
             }
         }
 
@@ -81,14 +78,15 @@ class WalletSerializer(serializers.HyperlinkedModelSerializer):
     
 
 class FundSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.SerializerMethodField('get_owner_name')
     class Meta:
         model = Fund
         fields = ['url', 'amount', 'owner', 'created_at']
         extra_kwargs = {
-            'owner': {
-                'read_only': True,
-                'view_name': 'profile-detail',
-                'lookup_url_kwarg': 'username'
-            },
             'created_at': {'read_only': True}
         }
+
+
+    def get_owner_name(self, fund):
+        name = fund.owner.user.name
+        return name
