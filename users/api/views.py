@@ -310,6 +310,7 @@ def send_fund(request, username):
                 return Response(data=serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 
 @api_view(['GET', ])

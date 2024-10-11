@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # my apps
     'users.apps.UsersConfig',
     'crypto.apps.CryptoConfig',
+
     # third party apps
     'rest_framework',
     'rest_framework.authtoken'
@@ -190,6 +191,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 STORAGES = {
     "staticfiles": {
         "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Static files locally
