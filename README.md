@@ -55,7 +55,6 @@ User Creation and Management
 You would get a response that looks like this
 
     {
-        "url": "http://127.0.0.1:8000/users/details/tester/",
         "user_id": <generated user id>,
         "email": "tester@gmail.com",
         "username": "tester",
@@ -75,15 +74,15 @@ Note that only the email, username and name can be updated
 
 - After a user has been created, they get a profile that contains their wallet's seed phrase and shows their account balance.
 
-  To access a user's profile, make a GET request to https://olumoroti.pythonanywhere.com/users/profile/{username}/
+  To access a user's profile, make a GET request to https://olumoroti.pythonanywhere.com/users/profile/{profile slug}/
 
   Response
 
       {
-        "url": "https://olumoroti.pythonanywhere.com/users/profile/3/",
         "user": "https://olumoroti.pythonanywhere.com/users/details/tester/",
+        "slug": tester-3
         "balance": 1200,
-        "wallet": "https://olumoroti.pythonanywhere.com/users/wallet/{users waller id}/"
+        "wallet": "https://olumoroti.pythonanywhere.com/users/wallet/{wallet slug}/"
       }
 
   - If a user wants to delete their account, make a DELETE request to https://olumoroti.pythonanywhere.com/users/{username}/delete/
@@ -114,22 +113,22 @@ Wallets
    Response
 
         {
-            "url": "https://olumoroti.pythonanywhere.com/users/wallet/{wallet id}/",
+            "slug": "{wallet slug}",
             "seed_phrase": "<wallet seed phrase>",
-            "owner": "https://olumoroti.pythonanywhere.com/users/profile/3/"
+            "owner": "https://olumoroti.pythonanywhere.com/users/profile/{profile slug}/"
         }
 
    *Note that when trying to add the seed_phrase field in your code, each word contained in the seed_phrase should be separated by an underscore(_).
    If they are not separated by an underscore, the wallet won't be saved
 
-  - To get a user's wallet details, make a GET request to  https://olumoroti.pythonanywhere.com/users/wallet/{username}/
+  - To get a user's wallet details, make a GET request to  https://olumoroti.pythonanywhere.com/users/wallet/{wallet slug}/
 
   Response
 
         {
-            "url": "https://olumoroti.pythonanywhere.com/users/wallet/{wallet id}/",
+            "slug": "{wallet slug}",
             "seed_phrase": "<wallet seed phrase>",
-            "owner": "https://olumoroti.pythonanywhere.com/users/profile/3/"
+            "owner": "https://olumoroti.pythonanywhere.com/users/profile/{profile slug}/"
         }
 
 - To delete a wallet, make a DELETE reqest to https://olumoroti.pythonanywhere.com/users/wallet/{username}/delete/
