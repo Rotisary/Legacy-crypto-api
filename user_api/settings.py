@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9_9*5qf+yvzguk2myb_y+n+7l9$9mutfs%bj)s&_$p!29wfb_s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['olumoroti.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -109,20 +109,17 @@ AUTH_USER_MODEL = 'users.User'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DB_NAME = 'Olumoroti$crypto_db'
-DB_USER = 'Olumoroti'
-PASSWORD = 'SQcr@db1'
+DB_NAME = 'legacy_crypto_db'
+DB_USER = 'django'
+PASSWORD = 'password'
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': DB_NAME,
         'USER': DB_USER,
         'PASSWORD': PASSWORD,
-        'HOST': 'Olumoroti.mysql.pythonanywhere-services.com',
-        'PORT': '3306',
-	'OPTIONS': {
-            'charset': 'utf8mb4',
-        }
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -191,12 +188,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-<<<<<<< HEAD
-=======
 
 STORAGES = {
     "staticfiles": {
         "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Static files locally
     },
 }
->>>>>>> 5cb9ad6602d25670368ad7b4864c1113cda57b80

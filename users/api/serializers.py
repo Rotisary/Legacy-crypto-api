@@ -43,7 +43,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     )
     class Meta:
         model = Profile
-        fields = ['user', 'balance', 'wallet']
+        fields = ['user', 'slug', 'balance', 'wallet']
         extra_kwargs = {
             'user': {
                 'lookup_field': 'username',
@@ -61,13 +61,14 @@ class ChangePasswordSerializer(serializers.Serializer):
 class WalletSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Wallet
-        fields = ['seed_phrase', 'owner', 'external_wallet']
+        fields = ['slug', 'seed_phrase', 'owner', 'external_wallet']
         extra_kwargs = {
             'owner': {
                 'view_name': 'profile-detail',
                 'read_only': True,
                 'lookup_field': 'slug'
-            }
+            },
+            'slug': {'read_only': True}
         }
 
 
@@ -85,6 +86,13 @@ class FundSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             'created_at': {'read_only': True}
         }
+
+
+    def validate_amount(self, value):
+        if value < 50:
+            raise serializers.ValidationError({'error': 'you cannot send an amount lesser than 50'})
+        
+        return value
 
 
     def get_owner_name(self, fund):

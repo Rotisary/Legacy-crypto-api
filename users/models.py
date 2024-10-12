@@ -47,12 +47,12 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     user_id = models.CharField(verbose_name='user id',
-				  max_length=8, 
+				                  max_length=8, 
                                   unique=True, 
                                   null=False, 
                                   blank=False)
     email = models.EmailField(verbose_name='email',
-			      max_length=254, 
+			                  max_length=254, 
                               unique=True, 
                               null=False, 
                               blank=False)
@@ -127,7 +127,7 @@ class Wallet(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(f"{self.owner.user.username} {self.id}")
+        self.slug = slugify(f"{self.owner.user.username}")
         return super(Wallet, self).save(*args, **kwargs)
 
 
