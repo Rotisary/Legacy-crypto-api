@@ -1,5 +1,5 @@
 This API was created to offer backend features such as user management, user authentication, wallet seed phrase storage and fund transfer for a crypto site.
-It also interacts with CoinMarketCap's API to get prices of various cryptocurrencies and display's it to the user.
+It also interacts with CoinMarketCap's API to get prices of various cryptocurrencies and display it to the user.
 
 It is fairly simple to integrate with the API, just follow the steps below:
 
